@@ -1,0 +1,44 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kubeflow
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  labels:
+    name: kubeflow
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/hiteshsp/kubeflow-keycloak.git
+    targetRevision: HEAD
+    path: environment/dev/kubeflow/manifests
+    kustomize:
+      version: v3.2.0
+      namePrefix: kf-
+      nameSuffix: -dev
+      commonLabels:
+        application: kubeflow
+  destination:
+    server: https://kubernetes.default.svc
+    name: in-cluster
+    namespace: kubeflow
+  syncPolicy:
+    automated:
+      prune: true 
+      selfHeal: true 
+      allowEmpty: false 
+    syncOptions:     
+    - Validate=false 
+    - CreateNamespace=true 
+    - PrunePropagationPolicy=foreground
+    - PruneLast=true 
+    managedNamespaceMetadata: 
+      labels: 
+        application: kubeflow
+    retry:
+      limit: 5 
+      backoff:
+        duration: 5s 
+        factor: 2 
+        maxDuration: 3m 
