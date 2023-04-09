@@ -6,7 +6,7 @@
 #
 
 resource "aws_iam_role" "demo-cluster" {
-  name = "eks-demo-cluster"
+  name = var.cluster_name
 
   assume_role_policy = <<POLICY
 {
@@ -47,7 +47,7 @@ resource "aws_security_group" "demo-cluster" {
   }
 
   tags = {
-    Name = "terraform-eks-demo"
+    Name = var.cluster_name
   }
 }
 
@@ -62,7 +62,7 @@ resource "aws_security_group_rule" "demo-cluster-ingress-workstation-https" {
 }
 
 resource "aws_eks_cluster" "demo" {
-  name     = var.cluster-name
+  name     = var.cluster_name
   role_arn = aws_iam_role.demo-cluster.arn
   version = "1.22"
 

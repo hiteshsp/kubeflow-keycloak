@@ -1,11 +1,16 @@
+#
+# Variables Configuration
+#
+
 variable "cluster_name" {
-    type = string
-    description = "AWS EKS Cluster Name"
+  default = "terraform-eks-demo"
+  type    = string
 }
 
 variable "node_group_name" {
-    type = string
-    description = "AWS EKS Node Group Name"
+  type = string
+  description = "AWS EKS Node Group Name"
+  default = "demo"
 }
 
 variable "eks_min_size" {
